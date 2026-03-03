@@ -1,0 +1,10 @@
+{
+    "name": "school-finder-by-doctorwaleerat",
+    "version": "1.0.0",
+    "description": "School Finder App - Find the right school for your child",
+    "private": true,
+    "scripts": {
+          "start": "npx serve .",
+          "build": "echo 'Static site - no build needed'"
+    }
+}
