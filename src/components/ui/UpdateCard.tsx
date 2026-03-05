@@ -12,7 +12,11 @@ interface Props {
 
 export default function UpdateCard({ update, compact }: Props) {
   const { lang, t } = useLang();
-  const config = CATEGORY_CONFIG[update.category];
+  const config = CATEGORY_CONFIG[update.category] ?? {
+    icon: "📰",
+    color: "#86868B",
+    labelKey: "catGeneralNews",
+  };
   const title = lang === "th" ? update.title_th : update.title_en;
   const body = lang === "th" ? update.body_th : update.body_en;
 
