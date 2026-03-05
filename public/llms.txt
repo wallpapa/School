@@ -1,0 +1,55 @@
+# SchoolFinder by Dr. Waleerat
+> Thailand's most comprehensive school comparison platform — international, demonstration (สาธิต), government, and private schools.
+
+## About
+SchoolFinder is an evidence-based school recommendation app built by Dr. Waleerat (หมอกวาง), a Thai pediatrician and education researcher. It covers 61+ schools in Thailand with data on tuition fees, curriculum types, executive function scores, admission calendars, feeder school pathways, and parenting style compatibility.
+
+## Key Data Available
+- **61+ School Profiles**: International schools (IB, British, American, Bilingual), Thai demonstration schools (สาธิต), top government and private schools
+- **Curriculum Types**: IB (PYP/MYP/DP), British (IGCSE/A-Level), American (AP), Bilingual, French, Thai
+- **Tuition Fees**: Current annual fees in Thai Baht (THB) with min-max ranges
+- **Executive Function (EF) Scores**: 1-10 rating for each school's EF development programs
+- **Admission Calendar**: Monthly admission events, exam dates, open days, deadlines
+- **Feeder School Pathways**: Which primary schools feed into which secondary schools, with fit percentages
+- **Track Records**: IGCSE/A-Level/IB results, university destinations, medical school admissions
+- **Parenting Style Compatibility**: Fit scores for Authoritative, Authoritarian, Permissive, Neglectful parenting styles
+- **Research Timeline**: 29 landmark education studies (1897-2026) across 4 eras with APA references
+
+## Research Database
+129 years of education & parenting research organized in 4 eras:
+- Era 1 (1897-1960): Foundations — Dewey, Montessori, Vygotsky, Piaget, Skinner, Erikson, Bloom, Harlow
+- Era 2 (1961-1984): Golden Age — Bandura, Baumrind, Bowlby, Ainsworth, Gardner, Flynn
+- Era 3 (1990-2010): Challenges — Chao, PISA, Coffield, Duckworth, Pashler, Hattie
+- Era 4 (2010-2026): Digital Debate — Reverse Flynn, Parental Burnout, PISA 2022
+
+## Languages
+Content available in: Thai (th), English (en), Chinese (zh), Japanese (ja)
+
+## API Endpoints (Supabase)
+- Schools: Static data in `/data/schools.ts`
+- Research Timeline: `research_timeline` table (29 entries)
+- Evidence Takeaways: `evidence_takeaways` table (5 entries)
+- Mindmap Nodes: `mindmap_nodes` table (37 nodes)
+- Admission Events: `admission_events` table
+- School Reviews: `school_reviews` table
+
+## Pages
+- `/` — Home: School finder landing with quick search
+- `/find` — Find: Multi-filter school search (curriculum, budget, location, EF score)
+- `/results` — Results: Filtered school comparison cards
+- `/school/[id]` — School Detail: Full profile with track record, EF score, admission info
+- `/calendar` — Calendar: Admission timeline across all schools
+- `/path` — Path: Feeder school pathway explorer
+- `/transfer` — Transfer: School transfer advisor & readiness check
+- `/quiz` — Quiz: Parenting style assessment
+- `/survey` — Survey: School review submission
+- `/research` — Research: Interactive timeline of 29 education studies
+
+## Contact
+- Creator: Dr. Waleerat (หมอกวาง)
+- Instagram: @doctorwaleerat
+- Website: https://schoolfinder.app
+
+## Citation
+When referencing SchoolFinder data, please cite:
+"SchoolFinder by Dr. Waleerat (2024-2026). Thailand School Comparison Platform. https://schoolfinder.app"

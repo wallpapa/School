@@ -150,3 +150,67 @@ export const TIER_LABELS: Record<TierLevel, string> = {
   tier_2: "Tier 2",
   tier_3: "Tier 3",
 };
+
+/* ── School Schedule Types ── */
+
+export interface TermPeriod {
+  name: string;       // "Term 1", "Semester 1", "Quarter 1"
+  nameKey?: string;   // i18n key
+  start: string;      // ISO date "2025-08-18"
+  end: string;        // ISO date "2025-12-12"
+}
+
+export interface BreakPeriod {
+  name: string;       // "Mid-Term Break", "Christmas Break", "Songkran"
+  nameKey?: string;
+  start: string;
+  end: string;
+  type: "mid_term" | "end_term" | "holiday" | "special";
+}
+
+export interface KeyDate {
+  name: string;
+  nameKey?: string;
+  date: string;       // ISO date (single day)
+  endDate?: string;   // ISO date (multi-day events)
+  type:
+    | "orientation"
+    | "exam"
+    | "parent_teacher"
+    | "teacher_workday"
+    | "graduation"
+    | "sports_day";
+}
+
+export interface SchoolSchedule {
+  // Daily schedule
+  openTime: string;              // "07:30"
+  closeTime: string;             // "15:30"
+  assemblyTime?: string;         // "08:00"
+  lunchStart?: string;           // "11:30"
+  lunchEnd?: string;             // "12:30"
+  dismissalTime?: string;        // "14:45" (early years)
+  afterSchoolEnd?: string;       // "17:00" (after-school activities end)
+  weekendActivities?: boolean;   // true if school has Sat activities
+  halfDaySchedule?: string;      // "07:30-12:00" (if applicable)
+
+  // Academic calendar
+  numSemesters: number;          // 2 or 3
+  academicYearStart: string;     // "2025-08-18" ISO date
+  academicYearEnd: string;       // "2026-06-19"
+
+  // Terms & breaks
+  terms: TermPeriod[];
+  breaks: BreakPeriod[];
+
+  // Key dates
+  orientationDates?: KeyDate[];
+  examPeriods?: KeyDate[];
+  parentTeacherDates?: KeyDate[];
+  teacherWorkdays?: KeyDate[];
+
+  // Metadata
+  calendarUrl?: string;
+  academicYear: string;          // "2025-2026"
+  lastUpdated?: string;          // ISO date
+}

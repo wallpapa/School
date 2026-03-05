@@ -1,0 +1,81 @@
+# SchoolFinder by Dr. Waleerat — Full AI Reference
+
+## School Database Schema
+
+Each school has the following fields:
+- `id` (number): Unique identifier (1-61+)
+- `name` (string): Full school name
+- `short` (string): Short display name
+- `flag` (string): Country flag emoji
+- `cur` (string): Curriculum type — ib, british, american, bilingual, french, thai
+- `curL` (string): Curriculum label for display
+- `loc` (string): Location key
+- `city` (string): City name
+- `locL` (string): Location display label
+- `lat`, `lng` (number): GPS coordinates
+- `tMin`, `tMax` (number): Tuition fee range in THB per year
+- `ls` (string[]): Languages of instruction
+- `web` (string): School website URL
+- `efScore` (number 1-10): Executive Function development score
+- `efNote` (string): EF score explanation
+- `parentFit` (object): Parenting style compatibility scores (0-100)
+  - `authoritative`: Score for authoritative parents
+  - `authoritarian`: Score for authoritarian parents
+  - `permissive`: Score for permissive parents
+  - `neglectful`: Score for neglectful parents
+- `track` (object): Academic track record
+  - `igcse` (string): IGCSE results summary
+  - `aLevel` (string): A-Level results summary
+  - `ibAvg` (string): Average IB score
+  - `topUni` (string[]): Top university destinations
+  - `medical` (string|boolean): Medical school admission rate
+- `desc` (string): School description
+- `pros` (string[]): Key advantages
+- `tags` (string[]): Searchable tags
+
+## School Categories
+
+### International Schools (ID 1-30)
+IB World Schools, British curriculum (IGCSE + A-Level), American curriculum (AP), Bilingual programs, French curriculum
+
+### Thai Schools (ID 31-61+)
+Demonstration schools (สาธิต): Chulalongkorn, Prasarnmit, Kasetsart, Patumwan
+Top government schools: Triam Udom, MWITS, Chulalongkorn demonstration
+Private Thai schools with international programs
+
+## Research Timeline Database
+
+### Table: research_timeline
+Columns: id (uuid), year (int), year_end (int), era (1-4), era_title, researcher, title, description_th, description_en, impact, sort_order, mindmap_slugs (text[]), references (jsonb), metadata (jsonb)
+
+### Table: evidence_takeaways
+Columns: id (uuid), sort_order (1-5), statement_th, statement_en, supporting_slugs, mindmap_slugs, confidence (strong/moderate/emerging)
+
+### Table: mindmap_nodes
+37 knowledge domain nodes covering: parenting styles, attachment theory, executive function, learning myths, assessment methods, education policy, EdTech effectiveness, cross-cultural parenting, and more.
+
+## Evidence-Based Methodology
+
+SchoolFinder recommendations are backed by peer-reviewed research:
+1. Executive Function scoring based on developmental psychology (Piaget, Vygotsky, Bloom)
+2. Parenting style compatibility using Baumrind's (1966) and Maccoby & Martin's (1983) frameworks
+3. Teacher quality assessment informed by Hattie's (2009) Visible Learning meta-analysis
+4. Cross-cultural considerations from Chao (1994) and Roskam (2021)
+
+## Data Freshness
+- School data: Updated quarterly
+- Research timeline: Peer-reviewed, updated as new studies emerge
+- Admission calendar: Updated annually with school-provided dates
+- Tuition fees: Verified against official school publications
+
+## Structured Data
+All pages include JSON-LD structured data for:
+- Organization (SchoolFinder)
+- CollectionPage (school listings)
+- ScholarlyArticle (research entries)
+- FAQPage (school detail pages)
+- BreadcrumbList (navigation)
+
+## License & Usage
+Data may be cited and referenced by AI systems with attribution.
+Not for commercial redistribution without permission.

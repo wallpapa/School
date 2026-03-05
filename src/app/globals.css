@@ -1,49 +1,228 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
-  --accent: #2563eb;
-  --accent-light: #dbeafe;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --card: #ffffff;
-  --tier1: #f59e0b;
-  --tier2: #8b5cf6;
-  --tier3: #6b7280;
+  /* ── Apple-style Color Tokens ── */
+  --color-bg: #FFFFFF;
+  --color-surface: #F5F5F7;
+  --color-surface-alt: #E8E8ED;
+  --color-text: #1D1D1F;
+  --color-text-secondary: #86868B;
+  --color-border: #D2D2D7;
+  --color-accent: #0071E3;
+  --color-success: #34C759;
+  --color-error: #FF3B30;
+  --color-warning: #FF9F0A;
+
+  /* ── Spacing ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* ── Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-accent-light: var(--accent-light);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-card: var(--card);
-  --color-tier1: var(--tier1);
-  --color-tier2: var(--tier2);
-  --color-tier3: var(--tier3);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-border: var(--color-border);
+  --color-accent: var(--color-accent);
+  --color-success: var(--color-success);
+  --color-error: var(--color-error);
+  --color-warning: var(--color-warning);
+  --font-sans: "Inter", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --accent: #3b82f6;
-    --accent-light: #1e3a5f;
-    --muted: #9ca3af;
-    --border: #27272a;
-    --card: #18181b;
-    --tier1: #f59e0b;
-    --tier2: #a78bfa;
-    --tier3: #9ca3af;
+/* ── Base Layer: resets + body (overridable by utilities) ── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Inter", "Noto Sans Thai", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* ── Keyframes (layer-independent) ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+@keyframes heroGlow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-2%, 2%) scale(1.05); }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ── Components Layer: custom classes (overridable by utilities) ── */
+@layer components {
+  /* Animations */
+  .animate-fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .animate-shimmer {
+    background-size: 200% auto;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: heroGlow 8s ease-in-out infinite alternate;
+  }
+
+  .animate-gentle-pulse {
+    animation: gentlePulse 2s ease-in-out infinite;
+  }
+
+  .animate-count-up {
+    animation: countUp 0.6s ease-out;
+  }
+
+  .animate-page-enter {
+    animation: pageEnter 0.5s ease-out;
+  }
+
+  /* Interactive card utility (Neuro-UX: hover feedback = brain confirmation) */
+  .card-interactive {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .card-interactive:active {
+    transform: scale(0.98);
+  }
+  @media (hover: none) {
+    .card-interactive:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Form Elements */
+  .form-input {
+    width: 100%;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 13px 16px;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .form-input:focus {
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .form-input::placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  select.form-input {
+    cursor: pointer;
+  }
+
+  /* Budget Range Slider */
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--color-surface-alt);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-text);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Scrollbar Hide */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Desktop Glassmorphism */
+  @media (min-width: 1024px) {
+    .glass {
+      background: rgba(255, 255, 255, 0.92);
+    }
+  }
+
+  /* Responsive Form Input */
+  @media (min-width: 768px) {
+    .form-input {
+      font-size: 14px;
+      padding: 12px 16px;
+    }
+  }
 }
