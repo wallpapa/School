@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useLang } from "@/i18n/LangProvider";
 import { schools } from "@/data/schools";
+import { IconCompare } from "@/components/ui/Icons";
 
 /* ── Grade-to-remaining-years mapping ── */
 const gradeYearsLeft: Record<string, number> = {
@@ -126,7 +127,9 @@ export default function ComparePage() {
       {/* Empty state */}
       {selected.length === 0 && (
         <div className="mt-10 text-center">
-          <div className="text-4xl">⚖️</div>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
+            <IconCompare className="h-8 w-8" />
+          </div>
           <p className="mt-3 text-[13px] text-[var(--color-text-secondary)]">
             {t("compareEmpty")}
           </p>
@@ -410,7 +413,9 @@ export default function ComparePage() {
       {/* Single school selected - prompt to add more */}
       {comparedSchools.length === 1 && (
         <div className="mt-6 text-center">
-          <div className="text-3xl">☝️</div>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
+            <IconCompare className="h-6 w-6" />
+          </div>
           <p className="mt-2 text-[13px] text-[var(--color-text-secondary)]">
             {t("compareNeedMore")}
           </p>

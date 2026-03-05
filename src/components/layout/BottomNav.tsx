@@ -3,7 +3,9 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useLang } from "@/i18n/LangProvider";
+import LangBar from "./LangBar";
 
+/* ── 5 core nav items (down from 8) ── */
 const navItems = [
   {
     key: "navHome",
@@ -25,27 +27,6 @@ const navItems = [
     ),
   },
   {
-    key: "navCalendar",
-    href: "/calendar",
-    icon: (
-      <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="14" height="13" rx="1.5" />
-        <path d="M6 4V2M14 4V2M3 7h14" />
-      </svg>
-    ),
-  },
-  {
-    key: "navPath",
-    href: "/path",
-    icon: (
-      <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round">
-        <circle cx="6" cy="6" r="2" />
-        <circle cx="14" cy="14" r="2" />
-        <path d="M8 8l6 6M8 14l6-6" />
-      </svg>
-    ),
-  },
-  {
     key: "navCompare",
     href: "/compare",
     icon: (
@@ -57,30 +38,22 @@ const navItems = [
     ),
   },
   {
-    key: "navHop",
-    href: "/transfer",
+    key: "navCalendar",
+    href: "/calendar",
     icon: (
-      <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round">
-        <path d="M3 10h14M9 6l4 4-4 4" />
+      <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="14" height="13" rx="1.5" />
+        <path d="M6 4V2M14 4V2M3 7h14" />
       </svg>
     ),
   },
   {
-    key: "navNews",
-    href: "/news",
+    key: "navLearn",
+    href: "/learn",
     icon: (
       <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="14" height="14" rx="2" />
-        <path d="M7 7h6M7 10h6M7 13h4" />
-      </svg>
-    ),
-  },
-  {
-    key: "navResearch",
-    href: "/research",
-    icon: (
-      <svg viewBox="0 0 20 20" className="h-5 w-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M10 3v14M6 7l4-4 4 4M4 17h12" />
+        <path d="M3 4h4l3 2h7v10H3z" />
+        <path d="M7 10h6M7 13h4" />
       </svg>
     ),
   },
@@ -90,8 +63,17 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { t } = useLang();
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    if (href === "/learn")
+      return (
+        pathname.startsWith("/learn") ||
+        pathname.startsWith("/research") ||
+        pathname === "/guide" ||
+        pathname === "/news"
+      );
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -102,7 +84,7 @@ export default function BottomNav() {
             SchoolFinder
           </div>
         </div>
-        <div className="flex flex-col gap-0.5 px-3">
+        <div className="flex flex-1 flex-col gap-0.5 px-3">
           {navItems.map((item) => (
             <Link
               key={item.key}
@@ -119,6 +101,11 @@ export default function BottomNav() {
               <span>{t(item.key)}</span>
             </Link>
           ))}
+        </div>
+
+        {/* Language switcher at the bottom of sidebar */}
+        <div className="border-t border-[var(--color-border)] px-5 py-4">
+          <LangBar />
         </div>
       </nav>
 

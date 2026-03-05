@@ -8,6 +8,7 @@ import { schools } from "@/data/schools";
 import { matchSchools, type MatchResult } from "@/lib/matching";
 import MatchBar from "@/components/ui/MatchBar";
 import EfBadge from "@/components/ui/EfBadge";
+import { IconSearch } from "@/components/ui/Icons";
 import ExpandableSection from "@/components/ui/ExpandableSection";
 
 export default function ResultsPage() {
@@ -50,7 +51,9 @@ export default function ResultsPage() {
       {/* No results */}
       {results.length === 0 && (
         <div className="mt-10 text-center">
-          <div className="text-4xl">🔍</div>
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
+            <IconSearch className="h-8 w-8" />
+          </div>
           <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
             {t("noResults")}
           </p>

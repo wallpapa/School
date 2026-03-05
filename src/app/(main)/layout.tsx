@@ -11,7 +11,10 @@ export default function MainLayout({
     <>
       <BottomNav />
       <div className="lg:pl-[220px]">
-        <LangBar />
+        {/* Compact language switcher — fixed top-right on mobile, hidden on desktop (shown in sidebar) */}
+        <div className="fixed right-4 top-3 z-40 lg:hidden">
+          <LangBar />
+        </div>
         <main className="animate-fade-up mx-auto max-w-[480px] px-5 pb-[100px] pt-5 md:max-w-[700px] md:px-8 lg:max-w-[960px] lg:px-10 lg:pb-8 lg:pt-8">
           {children}
         </main>

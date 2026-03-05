@@ -6,6 +6,7 @@ import { useLang } from "@/i18n/LangProvider";
 import { useFinder } from "@/context/FinderContext";
 import ChipGroup from "@/components/ui/ChipGroup";
 import ExpandableSection from "@/components/ui/ExpandableSection";
+import { IconPin, IconSearch } from "@/components/ui/Icons";
 
 export default function FinderPage() {
   const router = useRouter();
@@ -67,12 +68,15 @@ export default function FinderPage() {
 
   return (
     <div className="animate-page-enter">
-      {/* Header */}
-      <div className="mb-6 text-center">
-        <h2 className="text-[22px] font-extrabold tracking-tight">
+      {/* Header — clear visual hierarchy (Size & Scale) */}
+      <div className="mb-8 pt-2 text-center">
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-surface)] text-[var(--color-text-secondary)]">
+          <IconSearch className="h-7 w-7" />
+        </div>
+        <h1 className="text-[22px] font-extrabold tracking-tight text-[var(--color-text)] md:text-[26px]">
           {t("finderTitle")}
-        </h2>
-        <p className="mt-1 text-[13px] text-[var(--color-text-secondary)]">
+        </h1>
+        <p className="mt-1.5 text-[14px] text-[var(--color-text-secondary)]">
           {t("finderSub")}
         </p>
       </div>
@@ -82,7 +86,7 @@ export default function FinderPage() {
       {/* Budget */}
       <div className="mb-5">
         <div className="rounded-2xl bg-[var(--color-surface)] p-[18px]">
-          <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+          <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
             {t("budgetLabel")}
           </div>
           <div className="my-3 text-center text-[28px] font-bold tracking-tight">
@@ -105,7 +109,7 @@ export default function FinderPage() {
 
       {/* Age/Grade */}
       <div className="mb-5">
-        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
           {t("ageLabel")}
         </div>
         <select
@@ -150,7 +154,7 @@ export default function FinderPage() {
       <div className="md:grid md:grid-cols-2 md:gap-5">
       {/* School Style */}
       <div className="mb-5">
-        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
           {t("styleLabel")}
         </div>
         <ChipGroup
@@ -162,14 +166,15 @@ export default function FinderPage() {
 
       {/* Location */}
       <div className="mb-5">
-        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
           {t("locLabel")}
         </div>
         <div className="mb-3 flex gap-2">
           <button
             onClick={useGPS}
-            className="flex-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-3 text-center text-xs font-medium text-[var(--color-text-secondary)] transition-all duration-200 active:border-[var(--color-text)] active:text-[var(--color-text)]"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-3 text-center text-xs font-medium text-[var(--color-text-secondary)] transition-all duration-200 active:border-[var(--color-text)] active:text-[var(--color-text)]"
           >
+            <IconPin className="h-3.5 w-3.5" />
             {t("gpsBtn")}
           </button>
         </div>
@@ -184,17 +189,22 @@ export default function FinderPage() {
             </option>
           ))}
         </select>
-        <div className="mt-2 text-center text-[11px] text-[var(--color-text-secondary)]">
-          {state.lat
-            ? `📍 ${state.lat.toFixed(4)}, ${state.lng?.toFixed(4)}`
-            : t("locNote")}
+        <div className="mt-2 flex items-center justify-center gap-1 text-[11px] text-[var(--color-text-secondary)]">
+          {state.lat ? (
+            <>
+              <IconPin className="h-3 w-3" />
+              {state.lat.toFixed(4)}, {state.lng?.toFixed(4)}
+            </>
+          ) : (
+            t("locNote")
+          )}
         </div>
       </div>
       </div>{/* close Style + Location grid */}
 
       {/* Curriculum */}
       <div className="mb-5">
-        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+        <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
           {t("curLabel")}
         </div>
         <ChipGroup
@@ -209,7 +219,7 @@ export default function FinderPage() {
         {/* Current School */}
         <div className="mb-5">
           <div className="rounded-2xl bg-[var(--color-surface)] p-[18px]">
-            <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+            <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
               {t("currentSchoolLabel")}
             </div>
             <select
@@ -227,7 +237,7 @@ export default function FinderPage() {
 
         {/* Learning Style */}
         <div className="mb-5">
-          <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+          <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
             {t("varkLabel")}
           </div>
           <ChipGroup
@@ -240,7 +250,7 @@ export default function FinderPage() {
         {/* University Goal */}
         <div className="mb-5">
           <div className="rounded-2xl bg-[var(--color-surface)] p-[18px]">
-            <div className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+            <div className="mb-2.5 text-[11px] font-bold uppercase tracking-[1.5px] text-[var(--color-text-secondary)]">
               {t("uniLabel")}
             </div>
             <select
@@ -276,17 +286,18 @@ export default function FinderPage() {
         </div>
       </ExpandableSection>
 
-      {/* Search CTA */}
-      <div className="mt-6">
+      {/* Search CTA — large touch target (Fitts's Law) with high contrast */}
+      <div className="mt-8">
         <button
           onClick={handleSearch}
-          className="w-full rounded-[14px] bg-[var(--color-text)] px-4 py-4 text-center text-base font-bold text-white transition-all duration-200 active:scale-[0.98] active:opacity-90"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-text)] px-5 py-4 text-center text-[16px] font-bold text-white transition-all duration-200 active:scale-[0.98] active:opacity-90"
         >
+          <IconSearch className="h-5 w-5" />
           {t("searchBtn")}
         </button>
         <Link
           href="/"
-          className="mt-2.5 block w-full rounded-xl border border-[var(--color-border)] bg-transparent px-4 py-[15px] text-center text-sm text-[var(--color-text-secondary)] no-underline transition-all duration-200 active:scale-[0.97]"
+          className="mt-3 block w-full rounded-2xl border border-[var(--color-border)] bg-transparent px-5 py-3.5 text-center text-[14px] font-medium text-[var(--color-text-secondary)] no-underline transition-all duration-200 hover:border-[var(--color-text-secondary)] active:scale-[0.98]"
         >
           {t("backHome")}
         </Link>
