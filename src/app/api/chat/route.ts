@@ -3,12 +3,7 @@ import { classifyIntent, extractSchoolIds, getSuggestions, type Intent } from "@
 import { retrieveContext, getSchoolNames } from "@/lib/ai/knowledge-retriever";
 import { buildSystemPrompt, buildUserMessage } from "@/lib/ai/prompt-builder";
 import { extractAnsweredIntents } from "@/lib/ai/intent-flow";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { getSupabase } from "@/lib/supabase";
 
 /* ── Legal disclaimer appended to every response ── */
 const LEGAL_DISCLAIMER: Record<string, string> = {
@@ -70,7 +65,7 @@ export async function POST(req: Request) {
     } = {};
     if (session_id) {
       try {
-        const { data: sessionData } = await supabase
+        const { data: sessionData } = await getSupabase()
           .from("user_sessions")
           .select("schools_viewed, pages_visited, chat_count")
           .eq("session_id", session_id)
@@ -229,7 +224,7 @@ async function logChat(
 ) {
   try {
     // Insert user message
-    await supabase.from("chat_messages").insert({
+    await getSupabase().from("chat_messages").insert({
       session_id: sessionId,
       role: "user",
       content: userMessage,
@@ -239,7 +234,7 @@ async function logChat(
     });
 
     // Insert AI response
-    await supabase.from("chat_messages").insert({
+    await getSupabase().from("chat_messages").insert({
       session_id: sessionId,
       role: "assistant",
       content: aiResponse,
@@ -250,13 +245,13 @@ async function logChat(
 
     // Increment chat count
     try {
-      const { data: session } = await supabase
+      const { data: session } = await getSupabase()
         .from("user_sessions")
         .select("chat_count")
         .eq("session_id", sessionId)
         .single();
 
-      await supabase
+      await getSupabase()
         .from("user_sessions")
         .update({
           chat_count: (session?.chat_count || 0) + 1,
@@ -269,7 +264,7 @@ async function logChat(
 
     // Update intent analytics
     const today = new Date().toISOString().split("T")[0];
-    const { data: existing } = await supabase
+    const { data: existing } = await getSupabase()
       .from("intent_analytics")
       .select("*")
       .eq("date", today)
@@ -279,7 +274,7 @@ async function logChat(
     if (existing) {
       const samples = existing.sample_questions || [];
       if (samples.length < 5) samples.push(userMessage.slice(0, 200));
-      await supabase
+      await getSupabase()
         .from("intent_analytics")
         .update({
           count: (existing.count || 0) + 1,
@@ -288,7 +283,7 @@ async function logChat(
         })
         .eq("id", existing.id);
     } else {
-      await supabase.from("intent_analytics").insert({
+      await getSupabase().from("intent_analytics").insert({
         date: today,
         intent,
         count: 1,

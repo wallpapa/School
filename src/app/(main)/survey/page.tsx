@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useLang } from "@/i18n/LangProvider";
 import { schools } from "@/data/schools";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 export default function SurveyPage() {
   const { t, lang } = useLang();
@@ -143,7 +143,7 @@ export default function SurveyPage() {
     };
 
     try {
-      await supabase.from("school_reviews").insert(reviewData);
+      await getSupabase().from("school_reviews").insert(reviewData);
     } catch {
       // Silently handle — still show success (offline-first UX)
     }

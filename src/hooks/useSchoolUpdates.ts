@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import type { SchoolUpdate, ExamResultLink, UpdateCategory } from "@/types/updates";
 
 /* ── Fetch updates for a school or all schools ── */
@@ -12,7 +12,7 @@ export function useSchoolUpdates(schoolId?: number, category?: UpdateCategory) {
   useEffect(() => {
     async function fetch() {
       setLoading(true);
-      let query = supabase
+      let query = getSupabase()
         .from("school_updates")
         .select("*")
         .order("data_updated_at", { ascending: false });
@@ -39,7 +39,7 @@ export function useUpcomingEvents(limit = 10) {
     async function fetch() {
       setLoading(true);
       const today = new Date().toISOString().split("T")[0];
-      const { data } = await supabase
+      const { data } = await getSupabase()
         .from("school_updates")
         .select("*")
         .gte("event_date", today)
@@ -63,7 +63,7 @@ export function useExamResultLinks(schoolId?: number) {
   useEffect(() => {
     async function fetch() {
       setLoading(true);
-      let query = supabase
+      let query = getSupabase()
         .from("exam_result_links")
         .select("*")
         .order("exam_date", { ascending: true });

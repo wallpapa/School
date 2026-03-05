@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useLang } from "@/i18n/LangProvider";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import Chip from "@/components/ui/Chip";
 
 /* ── Types ── */
@@ -86,8 +86,8 @@ export default function ResearchPage() {
   useEffect(() => {
     async function load() {
       const [{ data: tl }, { data: tk }] = await Promise.all([
-        supabase.from("research_timeline").select("*").order("year").order("sort_order"),
-        supabase.from("evidence_takeaways").select("*").order("sort_order"),
+        getSupabase().from("research_timeline").select("*").order("year").order("sort_order"),
+        getSupabase().from("evidence_takeaways").select("*").order("sort_order"),
       ]);
       if (tl) setEntries(tl);
       if (tk) setTakeaways(tk);

@@ -17,16 +17,11 @@ import { createHmac } from "crypto";
 import { classifyIntent, extractSchoolIds, getSuggestions } from "@/lib/ai/intent-classifier";
 import { retrieveContext, getSchoolNames } from "@/lib/ai/knowledge-retriever";
 import { buildSystemPrompt, buildUserMessage } from "@/lib/ai/prompt-builder";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabase } from "@/lib/supabase";
 
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN || "";
 const LINE_CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || "";
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 /* ── Legal disclaimers for LINE messages ── */
 const LINE_DISCLAIMER =
@@ -153,7 +148,7 @@ export async function POST(req: Request) {
 
       // Log to Supabase (async, non-blocking)
       try {
-        await supabase.from("chat_messages").insert([
+        await getSupabase().from("chat_messages").insert([
           {
             session_id: sessionId,
             role: "user",

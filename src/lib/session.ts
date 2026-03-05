@@ -1,5 +1,5 @@
 // Anonymous session management — no login required
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 
 const SESSION_KEY = "sf-session-id";
 
@@ -23,7 +23,7 @@ export async function trackPageVisit(sessionId: string, path: string) {
   if (!sessionId) return;
   try {
     // Upsert session, append page if not already tracked
-    const { data: existing } = await supabase
+    const { data: existing } = await getSupabase()
       .from("user_sessions")
       .select("pages_visited, schools_viewed")
       .eq("session_id", sessionId)
@@ -32,7 +32,7 @@ export async function trackPageVisit(sessionId: string, path: string) {
     if (existing) {
       const pages = existing.pages_visited || [];
       if (!pages.includes(path)) {
-        await supabase
+        await getSupabase()
           .from("user_sessions")
           .update({
             pages_visited: [...pages, path],
@@ -40,13 +40,13 @@ export async function trackPageVisit(sessionId: string, path: string) {
           })
           .eq("session_id", sessionId);
       } else {
-        await supabase
+        await getSupabase()
           .from("user_sessions")
           .update({ last_seen: new Date().toISOString() })
           .eq("session_id", sessionId);
       }
     } else {
-      await supabase.from("user_sessions").insert({
+      await getSupabase().from("user_sessions").insert({
         session_id: sessionId,
         pages_visited: [path],
       });
@@ -60,7 +60,7 @@ export async function trackPageVisit(sessionId: string, path: string) {
 export async function trackSchoolView(sessionId: string, schoolId: number) {
   if (!sessionId) return;
   try {
-    const { data } = await supabase
+    const { data } = await getSupabase()
       .from("user_sessions")
       .select("schools_viewed")
       .eq("session_id", sessionId)
@@ -69,7 +69,7 @@ export async function trackSchoolView(sessionId: string, schoolId: number) {
     if (data) {
       const viewed = data.schools_viewed || [];
       if (!viewed.includes(schoolId)) {
-        await supabase
+        await getSupabase()
           .from("user_sessions")
           .update({
             schools_viewed: [...viewed, schoolId],
@@ -87,7 +87,7 @@ export async function trackSchoolView(sessionId: string, schoolId: number) {
 export async function setSessionPersona(sessionId: string, persona: string) {
   if (!sessionId) return;
   try {
-    await supabase
+    await getSupabase()
       .from("user_sessions")
       .update({ persona, updated_at: new Date().toISOString() })
       .eq("session_id", sessionId);
@@ -103,7 +103,7 @@ export async function setSessionPreferences(
 ) {
   if (!sessionId) return;
   try {
-    await supabase
+    await getSupabase()
       .from("user_sessions")
       .update({ preferences, updated_at: new Date().toISOString() })
       .eq("session_id", sessionId);
@@ -116,7 +116,7 @@ export async function setSessionPreferences(
 export async function getSessionData(sessionId: string) {
   if (!sessionId) return null;
   try {
-    const { data } = await supabase
+    const { data } = await getSupabase()
       .from("user_sessions")
       .select("*")
       .eq("session_id", sessionId)
