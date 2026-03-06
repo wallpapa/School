@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/i18n/LangProvider";
 import { schoolById } from "@/data/schools";
@@ -10,6 +10,7 @@ import UpdateCard from "@/components/ui/UpdateCard";
 import CountdownBadge from "@/components/ui/CountdownBadge";
 import Skeleton from "@/components/ui/Skeleton";
 import { useSchoolUpdates, useExamResultLinks } from "@/hooks/useSchoolUpdates";
+import { useSchoolReviews } from "@/hooks/useSchoolReviews";
 import { relativeTime } from "@/types/updates";
 
 export default function SchoolDetailPage({
@@ -41,6 +42,15 @@ export default function SchoolDetailPage({
   const s = school;
   const { updates, loading: updatesLoading } = useSchoolUpdates(Number(id));
   const { links: examLinks, loading: examsLoading } = useExamResultLinks(Number(id));
+  const { reviews, loading: reviewsLoading, addReview, submitting } = useSchoolReviews(Number(id));
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewParentType, setReviewParentType] = useState("");
+  const [reviewGrade, setReviewGrade] = useState("");
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   return (
     <div className="animate-page-enter">
@@ -381,7 +391,270 @@ export default function SchoolDetailPage({
         </Section>
       )}
 
-      {/* ── Tuition Last Updated ── */}
+      {/* ── Reviews Section ── */}
+      <Section title={t("reviewSectionTitle")}>
+        {/* Average + count */}
+        {!reviewsLoading && reviews.length > 0 && (
+          <div className="mb-4 flex items-center gap-3">
+            <div className="text-[28px] font-extrabold text-[var(--color-accent)]">
+              {(reviews.reduce((a, r) => a + (r.rating || 0), 0) / reviews.length).toFixed(1)}
+            </div>
+            <div>
+              <div className="text-[13px] font-medium">
+                {"⭐".repeat(Math.round(reviews.reduce((a, r) => a + (r.rating || 0), 0) / reviews.length))}
+              </div>
+              <div className="text-[11px] text-[var(--color-text-secondary)]">
+                {t("reviewCount").replace("{n}", String(reviews.length))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Review list */}
+        {reviewsLoading ? (
+          <div className="space-y-3">
+            <div className="h-20 animate-shimmer rounded-xl bg-gradient-to-r from-[var(--color-surface)] via-[var(--color-surface-alt)] to-[var(--color-surface)]" />
+            <div className="h-20 animate-shimmer rounded-xl bg-gradient-to-r from-[var(--color-surface)] via-[var(--color-surface-alt)] to-[var(--color-surface)]" />
+          </div>
+        ) : reviews.length === 0 && !reviewSubmitted ? (
+          <p className="py-4 text-center text-[12px] text-[var(--color-text-secondary)]">
+            {t("reviewEmpty")}
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {(showAllReviews ? reviews : reviews.slice(0, 3)).map((r) => (
+              <div
+                key={r.id}
+                className="rounded-xl bg-white p-3"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[13px] font-semibold">
+                      {r.reviewer_name || t("reviewAnonymous")}
+                    </span>
+                    {r.parent_type && (
+                      <span className="rounded-full bg-[var(--color-surface-alt)] px-2 py-0.5 text-[9px] font-medium text-[var(--color-text-secondary)]">
+                        {r.parent_type === "current_parent"
+                          ? t("reviewParentCurrent")
+                          : r.parent_type === "alumni_parent"
+                          ? t("reviewParentAlumni")
+                          : t("reviewParentProspective")}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-[var(--color-text-secondary)]">
+                    {relativeTime(r.created_at, lang)}
+                  </span>
+                </div>
+                <div className="mt-1 text-[12px]">
+                  {"⭐".repeat(r.rating || 0)}
+                  {r.child_grade && (
+                    <span className="ml-2 text-[10px] text-[var(--color-text-secondary)]">
+                      {r.child_grade}
+                    </span>
+                  )}
+                </div>
+                {r.comment_text && (
+                  <p className="mt-2 text-[12px] leading-relaxed text-[var(--color-text-secondary)]">
+                    {r.comment_text}
+                  </p>
+                )}
+              </div>
+            ))}
+
+            {/* Show more / less */}
+            {reviews.length > 3 && (
+              <button
+                onClick={() => setShowAllReviews(!showAllReviews)}
+                className="w-full py-2 text-center text-[11px] font-medium text-[var(--color-accent)]"
+              >
+                {showAllReviews
+                  ? t("reviewShowLess")
+                  : t("reviewShowMore").replace("{n}", String(reviews.length))}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Success message */}
+        {reviewSubmitted && (
+          <div className="my-3 rounded-xl bg-[var(--color-success)]/10 p-3 text-center text-[13px] font-medium text-[var(--color-success)]">
+            {t("reviewSuccess")}
+          </div>
+        )}
+
+        {/* Write review button */}
+        {!showReviewForm && (
+          <button
+            onClick={() => setShowReviewForm(true)}
+            className="mt-3 w-full rounded-xl border border-[var(--color-accent)] px-4 py-3 text-[13px] font-bold text-[var(--color-accent)] transition-all active:scale-[0.98]"
+          >
+            {t("reviewWriteBtn")}
+          </button>
+        )}
+
+        {/* Review form */}
+        {showReviewForm && (
+          <div className="mt-4 space-y-4 rounded-xl bg-white p-4">
+            {/* Nickname */}
+            <div>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {t("reviewNameLabel")}
+              </label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder={t("reviewNamePlaceholder")}
+                value={reviewName}
+                onChange={(e) => setReviewName(e.target.value)}
+                maxLength={50}
+              />
+            </div>
+
+            {/* Star rating */}
+            <div>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {t("reviewRatingLabel")} <span className="text-[var(--color-error)]">*</span>
+              </label>
+              <div className="flex gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setReviewRating(star)}
+                    className={`text-[28px] transition-all ${
+                      star <= reviewRating ? "grayscale-0" : "opacity-30 grayscale"
+                    }`}
+                  >
+                    ⭐
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Comment */}
+            <div>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {t("reviewCommentLabel")}
+              </label>
+              <textarea
+                className="form-input min-h-[80px] resize-y"
+                placeholder={t("reviewCommentPlaceholder")}
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                maxLength={1000}
+              />
+            </div>
+
+            {/* Parent type */}
+            <div>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {t("reviewParentLabel")}
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: t("reviewParentCurrent"), value: "current_parent" },
+                  { label: t("reviewParentAlumni"), value: "alumni_parent" },
+                  { label: t("reviewParentProspective"), value: "prospective" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setReviewParentType(reviewParentType === opt.value ? "" : opt.value)}
+                    className={`rounded-full border px-3 py-1.5 text-[11px] transition-all ${
+                      reviewParentType === opt.value
+                        ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10 font-medium text-[var(--color-accent)]"
+                        : "border-[var(--color-border)] text-[var(--color-text-secondary)]"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Grade */}
+            <div>
+              <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                {t("reviewGradeLabel")}
+              </label>
+              <select
+                className="form-input"
+                value={reviewGrade}
+                onChange={(e) => setReviewGrade(e.target.value)}
+              >
+                <option value="">{t("reviewGradeDefault")}</option>
+                {["Pre-Nursery","Nursery","KG1","KG2","KG3","P1","P2","P3","P4","P5","P6","M1","M2","M3","M4","M5","M6"].map((g) => (
+                  <option key={g} value={g}>{g}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* PDPA */}
+            <div className="flex items-start gap-2 rounded-lg bg-[var(--color-surface)] px-3 py-2">
+              <span className="text-[12px]">🔒</span>
+              <p className="text-[10px] leading-relaxed text-[var(--color-text-secondary)]">
+                {t("reviewPdpa")}
+              </p>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowReviewForm(false)}
+                className="flex-1 rounded-xl border border-[var(--color-border)] py-3 text-[13px] font-medium text-[var(--color-text-secondary)]"
+              >
+                {t("reviewCloseBtn")}
+              </button>
+              <button
+                disabled={reviewRating === 0 || submitting}
+                onClick={async () => {
+                  await addReview({
+                    school_name: s.short,
+                    reviewer_name: reviewName.trim() || null,
+                    rating: reviewRating,
+                    comment_text: reviewComment.trim() || null,
+                    parent_type: reviewParentType || null,
+                    child_grade: reviewGrade || null,
+                    review_language: lang,
+                  });
+                  setShowReviewForm(false);
+                  setReviewName("");
+                  setReviewRating(0);
+                  setReviewComment("");
+                  setReviewParentType("");
+                  setReviewGrade("");
+                  setReviewSubmitted(true);
+                }}
+                className={`flex-1 rounded-xl py-3 text-[13px] font-bold transition-all ${
+                  reviewRating > 0 && !submitting
+                    ? "bg-[var(--color-text)] text-white active:scale-[0.98]"
+                    : "cursor-not-allowed bg-[var(--color-surface-alt)] text-[var(--color-text-secondary)]"
+                }`}
+              >
+                {submitting ? t("reviewSubmitting") : t("reviewSubmit")}
+              </button>
+            </div>
+          </div>
+        )}
+      </Section>
+
+      {/* ── Admission Zone ── */}
+      {s.admissionZone && s.admissionZone.length > 0 && (
+        <Section title={t("ageCalcAdmissionZone")}>
+          <div className="flex flex-wrap gap-1.5">
+            {s.admissionZone.map((zone: string) => (
+              <span
+                key={zone}
+                className="rounded-full bg-white px-3 py-1.5 text-[11px] font-medium text-[var(--color-text)]"
+              >
+                {zone}
+              </span>
+            ))}
+          </div>
+          <p className="mt-2 text-[10px] text-[var(--color-text-secondary)]">
+            {t("ageCalcZoneNote")}
+          </p>
+        </Section>
+      )}
 
       {/* Action Buttons */}
       <div className="mt-5 flex flex-col gap-2 md:flex-row">

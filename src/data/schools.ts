@@ -99,6 +99,8 @@ export interface SchoolData {
     additionalFees?: string;
     sourceNote?: string;
   };
+  // admission zone (districts for government school in-zone quota)
+  admissionZone?: string[];
 }
 
 export interface AdmissionEvent {
@@ -116,7 +118,7 @@ export interface AdmissionCalendarEntry {
   src: string;
 }
 
-// ─── School Data (174 schools) ───
+// ─── School Data (179 schools) ───
 
 export const schools: SchoolData[] = [
   // ═══ INTERNATIONAL SCHOOLS (1-30) ═══
@@ -785,14 +787,16 @@ export const schools: SchoolData[] = [
     tMin:3000,tMax:6000,ls:['visual','auditory','readwrite'],
     efScore:9,parentFit:{authoritative:9,authoritarian:8,permissive:5,neglectful:3},
     track:{topUni:['จุฬาฯ','มหิดล','ธรรมศาสตร์'],medical:true},
-    tags:['thai_top','government'],desc:'ม.ปลาย สอบเข้าแพทย์สูง'},
+    tags:['thai_top','government'],desc:'ม.ปลาย สอบเข้าแพทย์สูง',
+    admissionZone:['เขตพญาไท','เขตราชเทวี','เขตดุสิต','เขตบางซื่อ','เขตจตุจักร']},
 
   {id:41,name:'โรงเรียนหอวัง',short:'หอวัง',flag:'\u{1F1F9}\u{1F1ED}',cur:'thai',curL:'ไทยชั้นนำ (รัฐ)',
     loc:'chatuchak',city:'bangkok',locL:'จตุจักร',lat:13.8148,lng:100.5650,
     tMin:3000,tMax:6000,ls:['visual','auditory','readwrite','kinesthetic'],
     efScore:8,parentFit:{authoritative:8,authoritarian:8,permissive:6,neglectful:4},
     track:{topUni:['จุฬาฯ','มหิดล','ธรรมศาสตร์','เกษตรศาสตร์']},
-    tags:['thai_top','government'],desc:'สหศึกษา ย่านจตุจักร'},
+    tags:['thai_top','government'],desc:'สหศึกษา ย่านจตุจักร',
+    admissionZone:['เขตจตุจักร','เขตลาดพร้าว','เขตบางเขน','เขตหลักสี่']},
 
   {id:42,name:'โรงเรียนสตรีวิทยา',short:'สตรีวิทยา',flag:'\u{1F1F9}\u{1F1ED}',cur:'thai',curL:'ไทยชั้นนำ (รัฐ)',
     loc:'phranakhon',city:'bangkok',locL:'พระนคร',lat:13.7581,lng:100.5041,
