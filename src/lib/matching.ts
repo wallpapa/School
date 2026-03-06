@@ -39,6 +39,11 @@ const zoneCenters: Record<string, [number, number]> = {
   thonburi: [13.7260, 100.4860],
   chaengwattana: [13.8900, 100.5700],
   bangna: [13.6600, 100.6400],
+  pathumwan: [13.7450, 100.5320],
+  prawet: [13.6920, 100.6450],
+  bangphli: [13.6300, 100.6800],
+  riverside: [13.6950, 100.5280],
+  bangphlat: [13.7700, 100.4800],
 };
 
 // Map school tags/cur to style categories
