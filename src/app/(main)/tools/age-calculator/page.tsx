@@ -359,32 +359,205 @@ export default function AgeCalculatorPage() {
             </div>
           ))}
 
-          {/* สามเสน info card */}
-          <div className="rounded-2xl bg-[var(--color-surface)] p-4">
-            <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
-              💡{" "}
-              {lang === "th"
-                ? "สำหรับโรงเรียนสามเสนวิทยาลัย"
-                : "For Samsenwit School"}
-            </div>
-            <div className="space-y-2 text-[11px] text-[var(--color-text-secondary)]">
-              <p>
-                {lang === "th"
-                  ? "🏠 เขตรับนักเรียน: พญาไท, ราชเทวี, ดุสิต, บางซื่อ, จตุจักร"
-                  : "🏠 Admission zones: Phaya Thai, Ratchathewi, Dusit, Bang Sue, Chatuchak"}
-              </p>
-              <p>
-                {lang === "th"
-                  ? "📋 สอบ ม.1: มี 2 ประเภท — ในเขตพื้นที่ (โควตา) และทั่วไป (สอบแข่งขัน)"
-                  : "📋 M1 admission: 2 types — in-zone (quota) and general (competitive exam)"}
-              </p>
-              <p>
-                {lang === "th"
-                  ? "⚠️ ย้ายทะเบียนบ้านเข้าเขตก่อนสมัคร — deadline ปกติ ก.พ.-มี.ค."
-                  : "⚠️ Transfer house registration before applying — deadline usually Feb-Mar"}
-              </p>
-            </div>
-          </div>
+          {/* ── ทะเบียนบ้าน Transfer Planning Timeline ── */}
+          {(() => {
+            // Compute M1 entry year from Thai system result
+            const thaiResult = allResults.find((r) => r.system === "thai");
+            const m1Grade = thaiResult?.grades.find((g) => g.grade === "M1");
+            const m1Year = m1Grade?.academicYear ?? 0;
+            const m1YearBE = m1Grade?.academicYearBE ?? 0;
+            const p1Grade = thaiResult?.grades.find((g) => g.grade === "P1");
+            const p1Year = p1Grade?.academicYear ?? 0;
+
+            if (!m1Year) return null;
+
+            // Timeline milestones
+            const timeline = [
+              {
+                yearCE: p1Year,
+                yearBE: p1Year + 543,
+                icon: "🎒",
+                label: lang === "th" ? "เข้า ป.1" : "Enter P1",
+                desc:
+                  lang === "th"
+                    ? "เริ่มเรียน ป.1 — เริ่มวางแผนย้ายทะเบียนบ้านได้เลย (ยิ่งเร็วยิ่งดี)"
+                    : "Start P1 — can start planning house registration transfer (earlier is better)",
+                urgency: "info" as const,
+              },
+              {
+                yearCE: p1Year + 2,
+                yearBE: p1Year + 2 + 543,
+                icon: "📋",
+                label: lang === "th" ? "ป.3 — เริ่มวางแผน" : "P3 — Start planning",
+                desc:
+                  lang === "th"
+                    ? "เริ่มหาบ้าน/ที่อยู่ในเขตพื้นที่บริการ (พญาไท, ราชเทวี, ดุสิต, บางซื่อ, จตุจักร)"
+                    : "Start looking for house/address in service area (Phaya Thai, Ratchathewi, Dusit, Bang Sue, Chatuchak)",
+                urgency: "info" as const,
+              },
+              {
+                yearCE: p1Year + 3,
+                yearBE: p1Year + 3 + 543,
+                icon: "🏠",
+                label:
+                  lang === "th"
+                    ? "ป.4 — ย้ายทะเบียนบ้าน (แนะนำ)"
+                    : "P4 — Transfer registration (recommended)",
+                desc:
+                  lang === "th"
+                    ? "ย้ายชื่อนักเรียนเข้าทะเบียนบ้านในเขต — เหลือเวลา 2-3 ปีก่อนสมัคร ม.1 (ปลอดภัยสุด)"
+                    : "Transfer student's name to house registration in zone — 2-3 years before M1 application (safest)",
+                urgency: "success" as const,
+              },
+              {
+                yearCE: m1Year - 1,
+                yearBE: m1Year - 1 + 543,
+                icon: "⚠️",
+                label:
+                  lang === "th"
+                    ? "ป.6 — Deadline สุดท้าย"
+                    : "P6 — Final deadline",
+                desc:
+                  lang === "th"
+                    ? "ต้องมีชื่อในทะเบียนบ้านก่อน ก.พ.-มี.ค. ปีที่สมัคร ม.1 — ย้ายก่อน ธ.ค. ปีนี้!"
+                    : "Must have name in house registration before Feb-Mar of M1 application year — transfer by Dec!",
+                urgency: "warning" as const,
+              },
+              {
+                yearCE: m1Year,
+                yearBE: m1YearBE,
+                icon: "🎯",
+                label:
+                  lang === "th"
+                    ? `ม.1 — ปีสมัครสอบ (${m1YearBE})`
+                    : `M1 — Application year (${m1Year})`,
+                desc:
+                  lang === "th"
+                    ? "รับสมัคร ก.พ.-มี.ค. → สอบ มี.ค. → ประกาศผล เม.ย. → เปิดเทอม พ.ค."
+                    : "Apply Feb-Mar → Exam Mar → Results Apr → Term starts May",
+                urgency: "target" as const,
+              },
+            ];
+
+            const urgencyColors: Record<string, string> = {
+              info: "var(--color-accent)",
+              success: "var(--color-success)",
+              warning: "var(--color-warning)",
+              target: "var(--color-text)",
+            };
+
+            return (
+              <div className="rounded-2xl bg-[var(--color-surface)] p-4">
+                <div className="mb-3 text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
+                  🏠{" "}
+                  {lang === "th"
+                    ? "วางแผนย้ายทะเบียนบ้าน — สามเสนวิทยาลัย"
+                    : "House Registration Transfer Plan — Samsenwit"}
+                </div>
+
+                {/* Zone info */}
+                <div className="mb-3 rounded-xl bg-white p-3">
+                  <div className="text-[11px] font-bold text-[var(--color-text)]">
+                    {lang === "th"
+                      ? "📍 เขตรับนักเรียน (ม.1 ในเขต)"
+                      : "📍 Service Area Districts (M1 in-zone)"}
+                  </div>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {["พญาไท", "ราชเทวี", "ดุสิต", "บางซื่อ", "จตุจักร"].map(
+                      (d) => (
+                        <span
+                          key={d}
+                          className="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-1 text-[10px] font-medium text-[var(--color-accent)]"
+                        >
+                          {d}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* Timeline */}
+                <div className="relative space-y-0">
+                  {timeline.map((t, i) => (
+                    <div key={i} className="flex gap-3">
+                      {/* Timeline line */}
+                      <div className="flex w-6 flex-col items-center">
+                        <div
+                          className="flex h-6 w-6 items-center justify-center rounded-full text-[12px]"
+                          style={{
+                            backgroundColor: `${urgencyColors[t.urgency]}15`,
+                          }}
+                        >
+                          {t.icon}
+                        </div>
+                        {i < timeline.length - 1 && (
+                          <div className="w-px flex-1 bg-[var(--color-border)]" />
+                        )}
+                      </div>
+                      {/* Content */}
+                      <div className="flex-1 pb-4">
+                        <div className="flex items-baseline gap-2">
+                          <span
+                            className="text-[12px] font-bold"
+                            style={{ color: urgencyColors[t.urgency] }}
+                          >
+                            {t.label}
+                          </span>
+                          <span className="text-[10px] text-[var(--color-text-secondary)]">
+                            {lang === "th"
+                              ? `พ.ศ. ${t.yearBE}`
+                              : `CE ${t.yearCE}`}
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-[10px] leading-relaxed text-[var(--color-text-secondary)]">
+                          {t.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Key notes */}
+                <div className="mt-2 space-y-1.5 rounded-xl bg-[var(--color-warning)]/8 p-3">
+                  <div className="text-[11px] font-bold text-[var(--color-warning)]">
+                    {lang === "th" ? "⚠️ สิ่งที่ต้องรู้" : "⚠️ Important notes"}
+                  </div>
+                  <ul className="space-y-1 text-[10px] text-[var(--color-text-secondary)]">
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "ต้องย้ายชื่อ \"นักเรียน\" เข้าทะเบียนบ้าน ไม่ใช่แค่พ่อแม่"
+                        : "Must transfer the STUDENT's name, not just parents"}
+                    </li>
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "บางปีโรงเรียนตรวจว่าอยู่จริงหรือไม่ (เยี่ยมบ้าน)"
+                        : "Some years the school verifies actual residence (home visits)"}
+                    </li>
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "ย้ายเร็ว = ปลอดภัยกว่า — บางโรงเรียนนับระยะเวลาที่อยู่ในเขต"
+                        : "Earlier transfer = safer — some schools count residency duration"}
+                    </li>
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "สอบ ม.1 มี 2 ประเภท: ในเขต (โควตา แข่งน้อย) vs ทั่วไป (แข่งมาก)"
+                        : "M1 exam has 2 types: in-zone (quota, less competitive) vs general (highly competitive)"}
+                    </li>
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "ตรวจสอบ deadline ล่าสุดจากเว็บโรงเรียนทุกปี เพราะเปลี่ยนได้"
+                        : "Check latest deadline from school website yearly — it can change"}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Thai vs International comparison insight */}
           <div className="rounded-2xl border-2 border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 p-4">
