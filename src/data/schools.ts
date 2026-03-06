@@ -788,7 +788,7 @@ export const schools: SchoolData[] = [
     efScore:9,parentFit:{authoritative:9,authoritarian:8,permissive:5,neglectful:3},
     track:{topUni:['จุฬาฯ','มหิดล','ธรรมศาสตร์'],medical:true},
     tags:['thai_top','government'],desc:'ม.ปลาย สอบเข้าแพทย์สูง',
-    admissionZone:['เขตพญาไท','เขตราชเทวี','เขตดุสิต','เขตบางซื่อ','เขตจตุจักร']},
+    admissionZone:['แขวงสามเสนใน เขตพญาไท']},
 
   {id:41,name:'โรงเรียนหอวัง',short:'หอวัง',flag:'\u{1F1F9}\u{1F1ED}',cur:'thai',curL:'ไทยชั้นนำ (รัฐ)',
     loc:'chatuchak',city:'bangkok',locL:'จตุจักร',lat:13.8148,lng:100.5650,

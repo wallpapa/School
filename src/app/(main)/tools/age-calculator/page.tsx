@@ -371,6 +371,9 @@ export default function AgeCalculatorPage() {
 
             if (!m1Year) return null;
 
+            // Deadline: ต้องมีชื่ออย่างน้อย 2 ปีก่อนวันรับสมัคร (ก.พ.-มี.ค.)
+            const deadlineYear = m1Year - 2; // ต้องย้ายก่อนปีนี้
+
             // Timeline milestones
             const timeline = [
               {
@@ -380,48 +383,37 @@ export default function AgeCalculatorPage() {
                 label: lang === "th" ? "เข้า ป.1" : "Enter P1",
                 desc:
                   lang === "th"
-                    ? "เริ่มเรียน ป.1 — เริ่มวางแผนย้ายทะเบียนบ้านได้เลย (ยิ่งเร็วยิ่งดี)"
-                    : "Start P1 — can start planning house registration transfer (earlier is better)",
+                    ? "เริ่มเรียน ป.1 — เริ่มวางแผนหาที่อยู่ในแขวงสามเสนใน เขตพญาไท"
+                    : "Start P1 — begin planning housing in Samsen Nai, Phaya Thai district",
                 urgency: "info" as const,
               },
               {
-                yearCE: p1Year + 2,
-                yearBE: p1Year + 2 + 543,
-                icon: "📋",
-                label: lang === "th" ? "ป.3 — เริ่มวางแผน" : "P3 — Start planning",
-                desc:
-                  lang === "th"
-                    ? "เริ่มหาบ้าน/ที่อยู่ในเขตพื้นที่บริการ (พญาไท, ราชเทวี, ดุสิต, บางซื่อ, จตุจักร)"
-                    : "Start looking for house/address in service area (Phaya Thai, Ratchathewi, Dusit, Bang Sue, Chatuchak)",
-                urgency: "info" as const,
-              },
-              {
-                yearCE: p1Year + 3,
-                yearBE: p1Year + 3 + 543,
+                yearCE: deadlineYear,
+                yearBE: deadlineYear + 543,
                 icon: "🏠",
                 label:
                   lang === "th"
-                    ? "ป.4 — ย้ายทะเบียนบ้าน (แนะนำ)"
-                    : "P4 — Transfer registration (recommended)",
+                    ? `ป.${deadlineYear - p1Year + 1} — ⚡ ย้ายทะเบียนบ้าน (Deadline!)`
+                    : `P${deadlineYear - p1Year + 1} — ⚡ Transfer registration (Deadline!)`,
                 desc:
                   lang === "th"
-                    ? "ย้ายชื่อนักเรียนเข้าทะเบียนบ้านในเขต — เหลือเวลา 2-3 ปีก่อนสมัคร ม.1 (ปลอดภัยสุด)"
-                    : "Transfer student's name to house registration in zone — 2-3 years before M1 application (safest)",
-                urgency: "success" as const,
+                    ? `ย้ายชื่อนักเรียนเข้าทะเบียนบ้าน ก่อน มี.ค. ${deadlineYear + 543} — กฎ สพฐ. ต้องมีชื่ออย่างน้อย 2 ปีก่อนสมัคร!`
+                    : `Transfer student's name before Mar ${deadlineYear} — OBEC rule: must have name at least 2 years before application!`,
+                urgency: "warning" as const,
               },
               {
                 yearCE: m1Year - 1,
                 yearBE: m1Year - 1 + 543,
-                icon: "⚠️",
+                icon: "📋",
                 label:
                   lang === "th"
-                    ? "ป.6 — Deadline สุดท้าย"
-                    : "P6 — Final deadline",
+                    ? "ป.6 — เตรียมเอกสาร"
+                    : "P6 — Prepare documents",
                 desc:
                   lang === "th"
-                    ? "ต้องมีชื่อในทะเบียนบ้านก่อน ก.พ.-มี.ค. ปีที่สมัคร ม.1 — ย้ายก่อน ธ.ค. ปีนี้!"
-                    : "Must have name in house registration before Feb-Mar of M1 application year — transfer by Dec!",
-                urgency: "warning" as const,
+                    ? "เตรียมหนังสือรับรองการอยู่อาศัยจริง + สำเนาทะเบียนบ้าน + ใบ ปพ.1"
+                    : "Prepare residence certification + house registration copy + academic transcript",
+                urgency: "info" as const,
               },
               {
                 yearCE: m1Year,
@@ -455,24 +447,72 @@ export default function AgeCalculatorPage() {
                     : "House Registration Transfer Plan — Samsenwit"}
                 </div>
 
+                {/* 2-year rule banner */}
+                <div className="mb-3 rounded-xl bg-[var(--color-error)]/10 p-3 text-center">
+                  <div className="text-[13px] font-extrabold text-[var(--color-error)]">
+                    {lang === "th"
+                      ? "⚡ ต้องย้ายทะเบียนบ้านล่วงหน้าอย่างน้อย 2 ปี"
+                      : "⚡ Must transfer at least 2 years in advance"}
+                  </div>
+                  <div className="mt-1 text-[10px] text-[var(--color-text-secondary)]">
+                    {lang === "th"
+                      ? "นับจากวันย้ายถึงวันรับสมัคร (ก.พ.-มี.ค.) — กฎ สพฐ. ปี 2568-2569"
+                      : "Counted from transfer date to application date (Feb-Mar) — OBEC rule 2025-2026"}
+                  </div>
+                </div>
+
                 {/* Zone info */}
                 <div className="mb-3 rounded-xl bg-white p-3">
                   <div className="text-[11px] font-bold text-[var(--color-text)]">
                     {lang === "th"
-                      ? "📍 เขตรับนักเรียน (ม.1 ในเขต)"
-                      : "📍 Service Area Districts (M1 in-zone)"}
+                      ? "📍 เขตพื้นที่บริการ ม.1 ในเขต (สามเสนวิทยาลัย)"
+                      : "📍 Service Area for M1 in-zone (Samsenwit)"}
                   </div>
-                  <div className="mt-1 flex flex-wrap gap-1.5">
-                    {["พญาไท", "ราชเทวี", "ดุสิต", "บางซื่อ", "จตุจักร"].map(
-                      (d) => (
-                        <span
-                          key={d}
-                          className="rounded-full bg-[var(--color-accent)]/10 px-2.5 py-1 text-[10px] font-medium text-[var(--color-accent)]"
-                        >
-                          {d}
-                        </span>
-                      )
-                    )}
+                  <div className="mt-1.5 rounded-lg bg-[var(--color-accent)]/10 px-3 py-2">
+                    <span className="text-[12px] font-bold text-[var(--color-accent)]">
+                      {lang === "th"
+                        ? "แขวงสามเสนใน เขตพญาไท"
+                        : "Samsen Nai, Phaya Thai District"}
+                    </span>
+                  </div>
+                  <div className="mt-2 text-[10px] text-[var(--color-text-secondary)]">
+                    {lang === "th"
+                      ? "⚠️ เฉพาะแขวงสามเสนในเท่านั้น — ไม่ใช่ทั้งเขตพญาไท"
+                      : "⚠️ Only Samsen Nai subdistrict — not entire Phaya Thai district"}
+                  </div>
+                </div>
+
+                {/* Admission numbers */}
+                <div className="mb-3 rounded-xl bg-white p-3">
+                  <div className="text-[11px] font-bold text-[var(--color-text)]">
+                    {lang === "th"
+                      ? "📊 จำนวนรับ ม.1 ห้องเรียนปกติ (อ้างอิง 2568)"
+                      : "📊 M1 Regular Admission Quota (ref. 2025)"}
+                  </div>
+                  <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+                    <div className="rounded-lg bg-[var(--color-success)]/10 p-2">
+                      <div className="text-[16px] font-extrabold text-[var(--color-success)]">58</div>
+                      <div className="text-[9px] text-[var(--color-text-secondary)]">
+                        {lang === "th" ? "ในเขต" : "In-zone"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[var(--color-accent)]/10 p-2">
+                      <div className="text-[16px] font-extrabold text-[var(--color-accent)]">134</div>
+                      <div className="text-[9px] text-[var(--color-text-secondary)]">
+                        {lang === "th" ? "นอกเขต" : "General"}
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[var(--color-surface-alt)] p-2">
+                      <div className="text-[16px] font-extrabold text-[var(--color-text-secondary)]">48</div>
+                      <div className="text-[9px] text-[var(--color-text-secondary)]">
+                        {lang === "th" ? "พิเศษ" : "Special"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-1.5 text-[10px] text-[var(--color-success)]">
+                    {lang === "th"
+                      ? "💡 ในเขต: แข่งขันน้อยกว่านอกเขตมาก (สมัคร ~200 vs ~2,000+)"
+                      : "💡 In-zone: much less competitive than general (~200 vs ~2,000+ applicants)"}
                   </div>
                 </div>
 
@@ -520,9 +560,21 @@ export default function AgeCalculatorPage() {
                 {/* Key notes */}
                 <div className="mt-2 space-y-1.5 rounded-xl bg-[var(--color-warning)]/8 p-3">
                   <div className="text-[11px] font-bold text-[var(--color-warning)]">
-                    {lang === "th" ? "⚠️ สิ่งที่ต้องรู้" : "⚠️ Important notes"}
+                    {lang === "th" ? "⚠️ เงื่อนไขสำคัญ (จาก สพฐ.)" : "⚠️ Key requirements (from OBEC)"}
                   </div>
-                  <ul className="space-y-1 text-[10px] text-[var(--color-text-secondary)]">
+                  <ul className="space-y-1.5 text-[10px] text-[var(--color-text-secondary)]">
+                    <li className="font-bold text-[var(--color-error)]">
+                      •{" "}
+                      {lang === "th"
+                        ? "ต้องมีชื่อในทะเบียนบ้าน อย่างน้อย 2 ปี ก่อนวันรับสมัคร"
+                        : "Must have name in house registration at least 2 years before application date"}
+                    </li>
+                    <li>
+                      •{" "}
+                      {lang === "th"
+                        ? "ต้อง \"อยู่อาศัยจริง\" — โรงเรียนลงพื้นที่สุ่มเยี่ยมบ้าน ถ้าไม่เจอ = ตัดสิทธิ์"
+                        : "Must ACTUALLY reside there — school conducts random home visits, no-show = disqualified"}
+                    </li>
                     <li>
                       •{" "}
                       {lang === "th"
@@ -532,28 +584,35 @@ export default function AgeCalculatorPage() {
                     <li>
                       •{" "}
                       {lang === "th"
-                        ? "บางปีโรงเรียนตรวจว่าอยู่จริงหรือไม่ (เยี่ยมบ้าน)"
-                        : "Some years the school verifies actual residence (home visits)"}
+                        ? "เจ้าบ้านต้องเป็น บิดา/มารดา/ปู่ย่าตายาย (มีหลักฐานเป็นเจ้าของ)"
+                        : "Householder must be parent or grandparent (with ownership proof)"}
                     </li>
                     <li>
                       •{" "}
                       {lang === "th"
-                        ? "ย้ายเร็ว = ปลอดภัยกว่า — บางโรงเรียนนับระยะเวลาที่อยู่ในเขต"
-                        : "Earlier transfer = safer — some schools count residency duration"}
+                        ? "❌ ทะเบียนบ้านวัด / ทะเบียนบ้านกลาง — ใช้ไม่ได้"
+                        : "❌ Temple or central house registration — NOT accepted"}
                     </li>
                     <li>
                       •{" "}
                       {lang === "th"
-                        ? "สอบ ม.1 มี 2 ประเภท: ในเขต (โควตา แข่งน้อย) vs ทั่วไป (แข่งมาก)"
-                        : "M1 exam has 2 types: in-zone (quota, less competitive) vs general (highly competitive)"}
+                        ? "✅ บ้านเช่า / คอนโด ใช้ได้ — ต้องมีสัญญาเช่า + บิลค่าน้ำไฟชื่อผู้ปกครอง"
+                        : "✅ Rental / condo OK — must have lease contract + utility bills in guardian's name"}
                     </li>
                     <li>
                       •{" "}
                       {lang === "th"
-                        ? "ตรวจสอบ deadline ล่าสุดจากเว็บโรงเรียนทุกปี เพราะเปลี่ยนได้"
-                        : "Check latest deadline from school website yearly — it can change"}
+                        ? "ต้องดาวน์โหลด \"หนังสือรับรองการอยู่อาศัยจริง\" จากเว็บโรงเรียน"
+                        : "Must download 'Certificate of Actual Residence' from school website"}
                     </li>
                   </ul>
+                </div>
+
+                {/* Source */}
+                <div className="mt-2 text-center text-[9px] text-[var(--color-text-secondary)]">
+                  {lang === "th"
+                    ? "ข้อมูลอ้างอิง: ประกาศ สพฐ. 2568, ประกาศสามเสนวิทยาลัย 2568-2569 — ตรวจสอบ samsenwit.ac.th"
+                    : "Source: OBEC announcement 2025, Samsenwit 2025-2026 — verify at samsenwit.ac.th"}
                 </div>
               </div>
             );
