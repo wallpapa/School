@@ -44,6 +44,8 @@ const zoneCenters: Record<string, [number, number]> = {
   bangphli: [13.6300, 100.6800],
   riverside: [13.6950, 100.5280],
   bangphlat: [13.7700, 100.4800],
+  ramintra: [13.8588, 100.6098],
+  watthana: [13.7390, 100.5600],
 };
 
 // Map school tags/cur to style categories

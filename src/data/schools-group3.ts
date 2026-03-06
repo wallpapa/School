@@ -169,16 +169,19 @@ export const group3Schools: SchoolData[] = [
     pros:['สามภาษา ไทย-จีน-อังกฤษ','ค่าเทอมจับต้องได้','ย่านชุมชนจีน'],tags:['trilingual','private','chinese','ep_program'],
     shadow:'มี TA จีนและอังกฤษ',youtime:'ครูประจำชั้น, กิจกรรมวัฒนธรรมจีน',extra:'ภาษาจีน, ศิลปะจีน, กีฬา 10+ ชนิด, Chinese Cultural Festival'},
 
-  {id:111,name:'Trinity International School',short:'Trinity',flag:'\u{1F1F9}\u{1F1ED}',cur:'bilingual',curL:'สองภาษา (เอกชน)',
-    loc:'ratchada',city:'bangkok',locL:'รัชดา',lat:13.8147,lng:100.5728,
-    tMin:100000,tMax:250000,ls:['visual','readwrite','kinesthetic'],
-    web:'',mq:'Trinity+International+School+Bangkok',
-    efScore:7,efNote:'สองภาษาคุณภาพ — ผสม International style',
+  {id:111,name:'Trinity International School',short:'Trinity',flag:'\u{1F1FA}\u{1F1F8}',cur:'us',curL:'American (WASC)',
+    loc:'sukhumvit',city:'bangkok',locL:'สุขุมวิท 36 (ทองหล่อ)',lat:13.7275,lng:100.5780,
+    tMin:234000,tMax:284000,ls:['visual','readwrite','kinesthetic'],
+    web:'https://trinity.ac.th',mq:'Trinity+International+School+Bangkok+Sukhumvit+36',
+    efScore:7,efNote:'American WASC accredited / Trilingual EN/TH/ZH / Adventist Christian / ค่าเทอมเข้าถึงง่าย',
     parentFit:{authoritative:8,authoritarian:7,permissive:7,neglectful:6},
-    track:{topUni:['มหาวิทยาลัยไทยชั้นนำ','ม.นานาชาติ'],note:'Bilingual pathway สู่มหาวิทยาลัย'},
-    desc:'โรงเรียนสองภาษาสไตล์ International ย่านรัชดา',
-    pros:['ผสม International style','ทำเลรัชดาสะดวก','สองภาษาคุณภาพ'],tags:['bilingual','private','ep_program'],
-    shadow:'มี Learning Support',youtime:'Pastoral Care, Homeroom advisory',extra:'กีฬา 20+ ชนิด, Music, Art, STEM, Swimming'},
+    track:{topUni:['US universities','มหาวิทยาลัยไทย'],note:'American WASC accredited / Trilingual EN/TH/Mandarin / Est. 2003 / Adventist Christian values',src:'trinity.ac.th'},
+    desc:'American WASC ค่าเทอมประหยัด สุขุมวิท 36 / Trilingual EN/TH/ZH',
+    pros:['WASC accredited','ค่าเทอม ~234K ต่ำมาก K-G12','Trilingual EN/TH/Mandarin','ทำเลสุขุมวิท 36 (ทองหล่อ)','Non-profit Adventist Christian'],tags:['american','wasc','affordable','trilingual','christian','sukhumvit'],
+    establishedYear:2003,usp:'American WASC ค่าเทอมต่ำสุดย่านสุขุมวิท ~234K / Trilingual 3 ภาษา',
+    avgClassSize:25,nativeEnglishTeachers:true,teacherAccent:'American',
+    parentPraise:['ค่าเทอมถูกมากสำหรับ international','WASC accredited','3 ภาษา EN/TH/ZH'],
+    shadow:'มี Learning Support + ESL',youtime:'Pastoral Care, Homeroom advisory',extra:'กีฬา, Music, Art, STEM, Community Service, Scholarships'},
 
   // ═══ ต่างจังหวัด ═══
 
