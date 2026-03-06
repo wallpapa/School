@@ -11,7 +11,7 @@ import {
   IconSchoolThai, IconSchoolEP, IconSchoolBilingual, IconSchoolTrilingual,
   IconSchoolInter, IconSchoolAlt, IconHeart, IconFamily, IconBrain,
   IconLightning, IconBaby, IconCalendar, IconFlask, IconMoon,
-  IconBook, IconCake,
+  IconBook, IconCake, IconCompare,
 } from "@/components/ui/Icons";
 
 /* ── Tab definitions with SVG icons ── */
@@ -138,6 +138,7 @@ export default function LearnPage() {
           {/* Quick links (Alignment: consistent arrow-link pattern) */}
           <div className="space-y-2">
             <ArrowLink href="/guide" icon={<IconBookOpen className="h-4 w-4" />} label={t("learnGuideFullLink")} />
+            <ArrowLink href="/tools/curriculum-guide" icon={<IconCompare className="h-4 w-4" />} label={t("rdCurriculum")} />
             <ArrowLink href="/birth-date" icon={<IconCake className="h-4 w-4" />} label={t("learnBirthDateLink")} />
           </div>
         </div>
